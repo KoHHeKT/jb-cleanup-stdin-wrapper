@@ -76,6 +76,8 @@ public static class EntryPoint
     private static List<string> PrepareArgs(string editorConfigSearchFromDir, string tmpFilePath)
     {
         var argsList = new List<string> { $@"--include=""{tmpFilePath}""", @"--profile=""Built-in: Reformat Code""" };
+        if (Environment.OSVersion.Platform == PlatformID.Unix)
+            argsList.Insert(0, "cleanupcode");
         var editorConfig = PathTools.FindEditorConfig(editorConfigSearchFromDir);
 
         if (editorConfig != null)

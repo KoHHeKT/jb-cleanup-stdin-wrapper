@@ -40,7 +40,7 @@ public static class PathTools
                 return utilPath;
                 break;
             case PlatformID.Unix:
-                return utilPath + " cleanup";
+                return utilPath;
                 break;
             default:
                 throw new PlatformNotSupportedException();
@@ -49,8 +49,9 @@ public static class PathTools
 
     public static string? GetUtilPath(string jbUtilName)
     {
-        var paths = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.Process)
-            .Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        var splitBy = Environment.OSVersion.Platform == PlatformID.Unix ? ':' : ';';
+        var paths = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process)
+            .Split(splitBy, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Where(path => File.Exists(Path.Combine(path, jbUtilName)))
             .Select(path => Path.Combine(path, jbUtilName));
 
